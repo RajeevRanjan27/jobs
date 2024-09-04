@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: lightweight-job
+  labels:
+    app: lightweight-app
+spec:
+  backoffLimit: 2
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        app: lightweight-app
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: lightweight-container
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "-c", "echo Lightweight Job Running && sleep 10 && echo Job Finished"]
+      nodeSelector:
+        disktype: ssd
+  ttlSecondsAfterFinished: 300
